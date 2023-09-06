@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateDisplay() {
       // Mostrar operand1 en el campo de texto de abajo y operand2 en el campo de texto de arriba
       //TODO si el número es muy grande, mostrarlo en notación científica
-      //TODO mostrar la operación actual en el campo de texto de arriba
+      //FIXME mostrar el primer operando en el texto de arriba
       displayOperand1.textContent = operand2;
       displayOperand2.textContent = operand1;
     }
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     // Función para manejar el botón de igual
-    //FIXME Corregir NAN e INFINITY con Math_error
     equalsButton.addEventListener("click", () => {
       if (operand1 !== "" && operand2 !== "") {
         switch (currentOperation) {
