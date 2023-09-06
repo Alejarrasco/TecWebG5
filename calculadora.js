@@ -37,6 +37,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
     });
+
+    // Función para manejar los simbolos de operaciones
+    operationButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (currentOperation === null) {
+          if (shouldResetDisplay) {
+            operand1 = "";
+            shouldResetDisplay = false;
+          }
+          // operand1 += button.textContent;
+          updateDisplay();
+        } else {
+          operand2 += button.textContent;
+          updateDisplay();
+        }
+      });
+    });
   
     // Función para manejar las operaciones
     //TODO si el usuario presiona una operación y luego otra, realizar la primera operación
