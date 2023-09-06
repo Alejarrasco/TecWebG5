@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const numberButtons = document.querySelectorAll("[data-number]");
     const equalsButton = document.querySelector("[data-equals]");
   
-    let operand1 = "";
+    let operand1 = ""; //FIXME hay un problema al sumar 0.1 + 0.2 Corregir con Decimal
     let operand2 = "";
     let currentOperation = null;
     let shouldResetDisplay = false;
@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Función para actualizar la vista de los operandos
     function updateDisplay() {
       // Mostrar operand1 en el campo de texto de abajo y operand2 en el campo de texto de arriba
+      //TODO si el número es muy grande, mostrarlo en notación científica
+      //TODO mostrar la operación actual en el campo de texto de arriba
       displayOperand1.textContent = operand2;
       displayOperand2.textContent = operand1;
     }
@@ -37,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     // Función para manejar las operaciones
+    //TODO si el usuario presiona una operación y luego otra, realizar la primera operación
+    //TODO permitir la concatenación de operaciones (ej: 1 + 2 - 3 * 4 / 5)
     operationButtons.forEach((button) => {
       button.addEventListener("click", () => {
         if (operand1 !== "") {
@@ -47,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     // Función para manejar el botón de igual
+    //FIXME Corregir NAN e INFINITY con Math_error
     equalsButton.addEventListener("click", () => {
       if (operand1 !== "" && operand2 !== "") {
         switch (currentOperation) {
