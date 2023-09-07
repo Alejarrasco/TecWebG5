@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     let operand1 = ""; //FIXME hay un problema al sumar 0.1 + 0.2 Corregir con Decimal
     let operand2 = "";
+    let simbol = "";
     let currentOperation = null;
     let shouldResetDisplay = false;
   
@@ -16,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateDisplay() {
       // Mostrar operand1 en el campo de texto de abajo y operand2 en el campo de texto de arriba
       //TODO si el número es muy grande, mostrarlo en notación científica
-      //TODO mostrar la operación actual en el campo de texto de arriba
-      displayOperand1.textContent = operand2;
+      displayOperand1.textContent = simbol + operand2;
       displayOperand2.textContent = operand1;
     }
   
@@ -39,13 +39,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     // Función para manejar las operaciones
-    //TODO si el usuario presiona una operación y luego otra, realizar la primera operación
-    //TODO permitir la concatenación de operaciones (ej: 1 + 2 - 3 * 4 / 5)
     operationButtons.forEach((button) => {
       button.addEventListener("click", () => {
         if (operand1 !== "") {
+          simbol = button.textContent;
           currentOperation = button.textContent;
           shouldResetDisplay = true;
+          updateDisplay();
+        }
+        if (operand2 !== "" && simbol !== "") {
+          calculateResult(currentOperation);
+          simbol = button.textContent;
+          currentOperation = button.textContent;
+          shouldResetDisplay = true;
+          updateDisplay();
         }
       });
     });
@@ -53,6 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Función para manejar el botón de igual
     //FIXME Corregir NAN e INFINITY con Math_error
     equalsButton.addEventListener("click", () => {
+      calculateResult(currentOperation);
+    });
+
+    // Funcion para el boton de igual
+    function calculateResult(currentOperation){
       if (operand1 !== "" && operand2 !== "") {
         switch (currentOperation) {
           case "+":
@@ -69,11 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
             break;
         }
         operand2 = "";
+        simbol = "";
         currentOperation = null;
         shouldResetDisplay = true;
         updateDisplay();
       }
-    });
+    }
   
     // Función para manejar el botón de borrar
     deleteButton.addEventListener("click", () => {
@@ -94,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
       updateDisplay();
     });
   });
+
+
   
 
 
