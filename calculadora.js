@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const numberButtons = document.querySelectorAll("[data-number]");
     const equalsButton = document.querySelector("[data-equals]");
   
-    let operand1 = ""; //FIXME hay un problema al sumar 0.1 + 0.2 Corregir con Decimal
+    let operand1 = "";
     let operand2 = "";
     let simbol = "";
+    let decimal = 2; // TODO Poder modificar la cantidad de decimales mediante un botón
     let currentOperation = null;
     let shouldResetDisplay = false;
   
@@ -41,16 +42,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Función para manejar las operaciones
     operationButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        if (operand1 !== "") {
-          simbol = button.textContent;
-          currentOperation = button.textContent;
-          shouldResetDisplay = true;
-          updateDisplay();
-        }
         if (operand2 !== "" && simbol !== "") {
           calculateResult(currentOperation);
           simbol = button.textContent;
-          currentOperation = button.textContent;
+          shouldResetDisplay = true;
+          currentOperation = simbol;
+          updateDisplay();
+        } else if (operand1 !== "") {
+          simbol = button.textContent;
+          currentOperation = simbol;
           shouldResetDisplay = true;
           updateDisplay();
         }
@@ -65,19 +65,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Funcion para el boton de igual
     function calculateResult(currentOperation){
+      num1 = parseFloat(operand1);
+      num2 = parseFloat(operand2);
       if (operand1 !== "" && operand2 !== "") {
         switch (currentOperation) {
           case "+":
-            operand1 = (parseFloat(operand1) + parseFloat(operand2)).toString();
+            operand1 = (num1 + num2).toFixed(decimal);
             break;
           case "-":
-            operand1 = (parseFloat(operand1) - parseFloat(operand2)).toString();
+            operand1 = (num1 - num2).toFixed(decimal);
             break;
           case "*":
-            operand1 = (parseFloat(operand1) * parseFloat(operand2)).toString();
+            operand1 = (num1 * num2).toFixed(decimal);
             break;
           case "/":
-            operand1 = (parseFloat(operand1) / parseFloat(operand2)).toString();
+            operand1 = (num1 / num2).toFixed(decimal);
             break;
         }
         operand2 = "";
@@ -102,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     clearButton.addEventListener("click", () => {
       operand1 = "";
       operand2 = "";
+      simbol = "";
       currentOperation = null;
       shouldResetDisplay = false;
       updateDisplay();
