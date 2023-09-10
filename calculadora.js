@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const numberButtons = document.querySelectorAll("[data-number]");
     const equalsButton = document.querySelector("[data-equals]");
   
-    let operand1 = "";
-    let operand2 = "";
+    let operand1 = ""; //El de arriba
+    let operand2 = ""; //El de abajo
     let simbol = "";
     let decimal = 2; // TODO Poder modificar la cantidad de decimales mediante un botón
     let currentOperation = null;
@@ -18,65 +18,57 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateDisplay() {
       // Mostrar operand1 en el campo de texto de abajo y operand2 en el campo de texto de arriba
       //TODO si el número es muy grande, mostrarlo en notación científica
-      displayOperand1.textContent = simbol + operand2;
-      displayOperand2.textContent = operand1;
+      if (operand1 === ""){
+        console.log("operand1 = 0");
+        displayOperand1.textContent = "0";
+      } else {
+        displayOperand1.textContent = operand1 + simbol;
+      }
+      if (operand2 === ""){
+        console.log("operand2 = 0");
+        displayOperand2.textContent = "0";
+      } else {
+        displayOperand2.textContent = operand2;
+      }
     }
   
     // Función para manejar los números
     numberButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        if (currentOperation === null) {
-          if (shouldResetDisplay) {
-            operand1 = "";
-            shouldResetDisplay = false;
-          }
-          operand1 += button.textContent;
-          updateDisplay();
-        } else {
-          operand2 += button.textContent;
-          updateDisplay();
+        if (shouldResetDisplay) { //WAIT
+          operand2 = "";
+          shouldResetDisplay = false;
         }
-      });
-    });
-
-    // Función para manejar los simbolos de operaciones
-    operationButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        if (currentOperation === null) {
-          if (shouldResetDisplay) {
-            operand1 = "";
-            shouldResetDisplay = false;
-          }
-          // operand1 += button.textContent;
-          updateDisplay();
-        } else {
-          operand2 += button.textContent;
-          updateDisplay();
-        }
+        operand2 += button.textContent;
+        updateDisplay();
       });
     });
   
     // Función para manejar las operaciones
     operationButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        if (operand2 !== "" && simbol !== "") {
+        if (operand1 !== "" && simbol !== "") {
           calculateResult(currentOperation);
           simbol = button.textContent;
           shouldResetDisplay = true;
           currentOperation = simbol;
           updateDisplay();
-        } else if (operand1 !== "") {
+        } else if (operand2 !== "") {
           simbol = button.textContent;
           currentOperation = simbol;
+          operand1 = operand2;
           shouldResetDisplay = true;
           updateDisplay();
         }
       });
     });
-  
+
     // Función para manejar el botón de igual
     equalsButton.addEventListener("click", () => {
       calculateResult(currentOperation);
+      operand2 = operand1;
+      operand1 = "";
+      updateDisplay();
     });
 
     // Funcion para el boton de igual
@@ -98,11 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
             operand1 = (num1 / num2).toFixed(decimal);
             break;
         }
-        operand2 = "";
         simbol = "";
         currentOperation = null;
         shouldResetDisplay = true;
-        updateDisplay();
       }
     }
   
